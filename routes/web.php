@@ -11,11 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('arquivos.index');
-});
-
-// Allows the user to upload new files
+Route::get('/', 'ArquivosController@index');
 Route::get('/arquivos', 'ArquivosController@index');
 Route::get('/arquivos/upload', 'ArquivosController@upload');
 Route::post('/arquivos/upload', 'ArquivosController@doUpload');

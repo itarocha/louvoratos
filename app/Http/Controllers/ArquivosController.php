@@ -28,6 +28,7 @@ class ArquivosController extends BaseController
     public function index(Request $request, Response $response){
       $model = $this->dao->listagem();
 
+
       $response->headers->set('X-Frame-Options', 'SAMEORIGIN', false);
 
       return view('arquivos.index')->with('model',$model)->with('titulo','Repertório');

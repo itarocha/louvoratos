@@ -2,10 +2,6 @@
 @extends('layouts.default')
 @section('content')
 
-<div>
-	<a href="/arquivos/upload" class="btn btn-primary">Upload</a>
-</div>
-<div class="container-fluid">
 	<div class="row">
   @foreach($model as $item)
     <div class="col-sm-6 col-md-4">
@@ -36,6 +32,5 @@
   @endforeach
 </div>
 
-__$model->links()__
-</div>
+{!! "@model->links()" !!}
 @stop
