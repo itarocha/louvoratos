@@ -16,6 +16,9 @@ Route::get('/arquivos', 'ArquivosController@index');
 Route::get('/arquivos/upload', 'ArquivosController@upload');
 Route::post('/arquivos/upload', 'ArquivosController@doUpload');
 
+Route::get('/arquivos/agenda', 'ArquivosController@agenda');
+
+
 // Download Route
 Route::get('/download/{filename}/{nome}', function($filename, $nome)
 {

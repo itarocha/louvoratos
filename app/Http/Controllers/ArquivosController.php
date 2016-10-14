@@ -10,7 +10,8 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\File;
+use Illuminate\Support\Facades\File;
+//use Illuminate\Http\File;
 use Validator;
 
 use App\DAO\MusicasDAO;
@@ -44,6 +45,30 @@ class ArquivosController extends BaseController
               ->with('model',$model)
               ->with('titulo','Repertório');
     }
+
+    public function agenda(Request $request, Response $response){
+      $model = (object)array('data'=>'19/10/2016');
+
+      $contents = '';
+      $filename = 'teste.txt';
+      try
+      {
+          //dd(storage_path);
+          //$contents = File::get($filename);
+          $contents = File::get(storage_path('app/public/'.$filename));
+          //dd($contents);
+      }
+      catch (Illuminate\Filesystem\FileNotFoundException $exception)
+      {
+          die("The file doesn't exist");
+      }
+
+      return view('arquivos.agenda')
+              ->with('model',$model)
+              ->with('arquivo',$contents)
+              ->with('titulo','Agenda');
+    }
+
 
     public function upload(){
       $model = (object)array( 'id'=>0,

@@ -38,12 +38,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Louvor na Nuvem</a>
+          <a class="navbar-brand" href="#">Blez Cloud</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Principal</a></li>
             <li><a href="/arquivos/upload">Upload</a></li>
+            <li><a href="/arquivos/agenda">Agenda</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
