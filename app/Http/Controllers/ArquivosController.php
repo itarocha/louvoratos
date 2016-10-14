@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\MusicaDAO;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,28 +13,39 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
 use Validator;
 
+use App\DAO\MusicasDAO;
+use App\Util\PetraOpcaoFiltro;
+use App\Util\PetraInjetorFiltro;
+
 class ArquivosController extends BaseController
 {
   //use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $dao;
 
-    public function __construct(MusicaDAO $dao)
+    public function __construct(MusicasDAO $dao)
     {
       $this->dao = $dao;
     }
 
     public function index(Request $request, Response $response){
-      $model = $this->dao->listagem();
+      $query = new PetraOpcaoFiltro();
+      PetraInjetorFiltro::injeta($request, $query);
 
+      $model = $this->dao->listagemComFiltro($query,9);
+      // Carrega parâmetros do get (query params)
+      foreach ($request->query as $key => $value){
+         $model->appends([$key => $value]);
+      }
 
       $response->headers->set('X-Frame-Options', 'SAMEORIGIN', false);
 
-      return view('arquivos.index')->with('model',$model)->with('titulo','Repertório');
+      return view('arquivos.index')
+              ->with('model',$model)
+              ->with('titulo','Repertório');
     }
 
     public function upload(){
-
       $model = (object)array( 'id'=>0,
                               'descricao'=>'',
                               'artista'=>'',
@@ -142,7 +152,6 @@ class ArquivosController extends BaseController
         $file_mp3 = $request->file('arquivo_mp3');
         // $arquivo_mp3['path'] = $request->file('arquivo_mp3')->store('local');
 
-
         $nome = $this->NewGuid().'.'.$file_mp3->getClientOriginalExtension();
 
         $arquivo_mp3 = array();
@@ -158,12 +167,12 @@ class ArquivosController extends BaseController
       }
 
       $campos = [ 'descricao' => $request->input('descricao'),
-        'artista' => $request->input('artista'),
-        'link_cifraclub' => $request->input('link_cifraclub'),
-        'link_youtube' => $request->input('link_youtube'),
-        'arquivo_cifra' => $arquivo_cifra['nome_arquivo'],
-        'arquivo_mp3' => $arquivo_mp3['nome_arquivo']
-      ];
+                  'artista' => $request->input('artista'),
+                  'link_cifraclub' => $request->input('link_cifraclub'),
+                  'link_youtube' => $request->input('link_youtube'),
+                  'arquivo_cifra' => $arquivo_cifra['nome_arquivo'],
+                  'arquivo_mp3' => $arquivo_mp3['nome_arquivo']
+                ];
 
 
       //dd($campos);

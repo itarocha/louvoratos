@@ -32,5 +32,5 @@
   @endforeach
 </div>
 
-{!! "@model->links()" !!}
+{!! $model->links() !!}
 @stop
