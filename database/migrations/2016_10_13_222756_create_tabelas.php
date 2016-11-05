@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 // php artisan make:migration create_tabelas --create=cidades
-// *** php artisan migrate
+// *** php artisan migrate - cria tabelas
 // php artisan make:model Cidade
 // *** php artisan db:seed
 
@@ -34,14 +34,22 @@ class CreateTabelas extends Migration
 
       Schema::create('eventos', function (Blueprint $table) {
           $table->increments('id');
-          $table->integer('id_musica')->unsigned();
           $table->date('data_evento');
+          $table->timestamps();
+          $table->index('data_evento', 'eventos_idx01');
+      });
+
+      Schema::create('evento_musicas', function (Blueprint $table) {
+          $table->increments('id');
+          $table->integer('id_evento')->unsigned();
+          $table->integer('id_musica')->unsigned();
           $table->integer('ordem');
           $table->timestamps();
 
-          $table->index('data_evento', 'eventos_idx01');
           $table->foreign('id_musica')->references('id')->on('musicas');
+          $table->foreign('id_evento')->references('id')->on('eventos');
       });
+
     }
 
     /**
@@ -51,6 +59,7 @@ class CreateTabelas extends Migration
      */
     public function down()
     {
+      Schema::dropIfExists('evento_musicas');
       Schema::dropIfExists('eventos');
       Schema::dropIfExists('musicas');
     }

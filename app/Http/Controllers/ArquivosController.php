@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 //use Illuminate\Http\File;
 use Validator;
+use DB;
 
 use App\DAO\MusicasDAO;
 use App\Util\PetraOpcaoFiltro;
 use App\Util\PetraInjetorFiltro;
+
+use App\Evento;
 
 class ArquivosController extends BaseController
 {
@@ -63,10 +66,46 @@ class ArquivosController extends BaseController
           die("The file doesn't exist");
       }
 
+      $evento = $this->getUltimoEvento();
+      $musicas = null;
+      if ($evento){
+        $musicas = $this->getMusicasByEvento($evento->id);
+      }
+
+      //dd($musicas);
+
       return view('arquivos.agenda')
               ->with('model',$model)
               ->with('arquivo',$contents)
+              ->with('evento',$evento)
+              ->with('musicas',$musicas)
               ->with('titulo','Agenda');
+    }
+
+    private function getUltimoEvento(){
+      $max = DB::table('eventos')->max('data_evento');
+      if ($max) {
+        return Evento::where('data_evento','=',$max)->first();
+      }
+      return null;
+    }
+
+    private function getMusicasByEvento($id){
+      return DB::table('eventos')
+              ->select( 'eventos.id',
+                        'eventos.data_evento',
+                        'evento_musicas.id_musica',
+                        'evento_musicas.ordem',
+                        'musicas.descricao',
+                        'musicas.artista',
+                        'musicas.arquivo_cifra'
+
+                        )
+              ->join('evento_musicas','eventos.id','=','evento_musicas.id_evento')
+              ->join('musicas','musicas.id','=','evento_musicas.id_musica')
+              ->where('eventos.id','=',$id)
+              ->orderBy('evento_musicas.ordem')
+              ->get();
     }
 
 

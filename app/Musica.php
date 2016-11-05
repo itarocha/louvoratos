@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\MusicaEvento;
 
 class Musica extends Model
 {
@@ -16,8 +17,8 @@ class Musica extends Model
                           'link_cifraclub' => 'required|min:3|max:128',
                         );
 
-  public function eventos(){
-    return $this->hasMany('App\Musica');
+  public function musica_eventos(){
+    return $this->hasMany('App\MusicaEvento');
   }
     //
 }

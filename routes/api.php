@@ -23,3 +23,5 @@ Route::get('/user', function (Request $request) {
 Route::post('arquivos','ArquivoController@save');
 //Route::put('arquivos/{id}','ArquivoController@update');
 //Route::delete('arquivos/{id}','ArquivoController@delete');
+
+Route::get('/ajax/carregarcifra', 'AjaxController@carregarcifra');
